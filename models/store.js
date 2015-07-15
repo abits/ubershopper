@@ -1,19 +1,22 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var Store = new Schema({
+mongoose.connect('mongodb://localhost/ubershopper');
+
+var StoreSchema = new Schema({
   name:  String,
   description:  String,
   loc :  {
-    type: String},
+    type: String,
     coordinates: [Number]
-  },
+  }
 });
 
-store.index({loc: '2dsphere'});
+StoreSchema.index({loc: '2dsphere'});
+
+var Store = mongoose.model('Store', StoreSchema);
 
 // fixtures
-
 store_1 = new Store({
   name : 'store_1'
 });
@@ -21,3 +24,4 @@ store_1 = new Store({
 store_1.save(function(err) {
   console.log(err);
 })
+mongoose.disconnect();
