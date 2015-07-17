@@ -1,18 +1,33 @@
-var express = require('express');
+var fs = require('fs');
 var path = require('path');
+var express = require('express');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
-var routes = require('./routes/index');
-var users = require('./routes/users');
-var stores = require('./routes/stores');
-
-// models
-var Store = require('./models/store.js');
+var config = require('./app/config/config.js');
+var mongoose = require('mongoose');
 
 var app = express();
+
+// Connect to mongodb
+var connect = function () {
+  var options = { server: { socketOptions: { keepAlive: 1 } } };
+  mongoose.connect(config.db, options);
+};
+connect();
+mongoose.connection.on('error', console.log);
+mongoose.connection.on('disconnected', connect);
+
+// Bootstrap models
+fs.readdirSync(path.join(__dirname, 'app/models')).forEach(function (file) {
+  if (~file.indexOf('.js')) require(path.join(__dirname, 'app/models', file));
+});
+
+// Bootstrap routes
+var routes = require('./app/routes/index');
+var users = require('./app/routes/users');
+var stores = require('./app/routes/stores');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -61,6 +76,5 @@ app.use(function(err, req, res, next) {
         error: {}
     });
 });
-
 
 module.exports = app;
