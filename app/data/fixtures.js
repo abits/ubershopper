@@ -1,5 +1,3 @@
-"use strict";
-
 // fixtures
 var fixtureStore = new Store({
   name : 'store_1',
