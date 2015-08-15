@@ -16,4 +16,5 @@ var StoreSchema = new Schema({
 
 StoreSchema.index({loc: '2dsphere'});
 
-mongoose.model('Store', StoreSchema);
+var Store = mongoose.model('Store', StoreSchema);
+module.exports = Store;

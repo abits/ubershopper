@@ -5,10 +5,9 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var app = express();
 var config = require('./app/config/config.js');
 var mongoose = require('mongoose');
-
-var app = express();
 
 // Connect to mongodb
 var connect = function () {
@@ -19,18 +18,13 @@ connect();
 mongoose.connection.on('error', console.log);
 mongoose.connection.on('disconnected', connect);
 
-// Bootstrap models
-fs.readdirSync(path.join(__dirname, 'app/models')).forEach(function (file) {
-  if (~file.indexOf('.js')) require(path.join(__dirname, 'app/models', file));
-});
-
 // Bootstrap routes
 var routes = require('./app/routes/index');
 var users = require('./app/routes/users');
 var stores = require('./app/routes/stores');
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, 'app/views'));
 app.set('view engine', 'hbs');
 
 // uncomment after placing your favicon in /public
@@ -43,8 +37,8 @@ app.use(require('node-compass')({mode: 'expanded'}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
-app.use('/users', users);
-app.use('/stores', stores);
+app.use('/user', users);
+app.use('/store', stores);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
