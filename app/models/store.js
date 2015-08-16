@@ -9,7 +9,7 @@ var StoreSchema = new Schema({
   name:  String,
   description:  String,
   loc :  {
-    type: String,
+    type: {type: String},
     coordinates: [Number]
   }
 });

@@ -11,6 +11,8 @@ router.get('/:id', function(request, response) {
 
 router.post('/', function(request, response) {
   var store = Store();
+  console.log(request.body);
+  _.merge(store, request.body);
   store.save(function(err) {
     if (err) {
       response.send(err);
